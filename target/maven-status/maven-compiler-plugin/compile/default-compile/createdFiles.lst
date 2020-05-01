@@ -1,0 +1,9 @@
+pl/springtest/communicator/controller/ServerSocketHandler$1.class
+pl/springtest/communicator/controller/ServerConnectionHandler$1NewConnections.class
+pl/springtest/communicator/controller/ServerConnectionHandler.class
+pl/springtest/communicator/statement/ServerStatement.class
+pl/springtest/communicator/controller/MessagesHandler.class
+pl/springtest/communicator/CommunicatorApplication.class
+pl/springtest/communicator/controller/ServerSocketHandler.class
+pl/springtest/communicator/controller/MessagesHandler$1NewMessages.class
+pl/springtest/communicator/chat/Message.class
