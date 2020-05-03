@@ -1,5 +1,6 @@
 package pl.springtest.communicator.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import pl.springtest.communicator.chat.Message;
@@ -7,12 +8,15 @@ import pl.springtest.communicator.statement.ServerStatement;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Queue;
 
 /**
  * Socket server handler - create and close server socket
  */
 @Controller
 public class ServerSocketHandler {
+    @Autowired
+    private Queue<Message> readWriteMessages;
 
     /**
      * Create socket for server at specified port (1234)

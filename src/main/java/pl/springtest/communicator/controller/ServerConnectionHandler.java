@@ -3,6 +3,7 @@ package pl.springtest.communicator.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import pl.springtest.communicator.socket.SocketClient;
 import pl.springtest.communicator.statement.ServerStatement;
 
 import java.io.IOException;
@@ -24,9 +25,9 @@ public class ServerConnectionHandler {
      * Create list with client connections
      */
     @Bean
-    public List<Socket> clientSockets() {
+    public List<SocketClient> clientSockets() {
         ServerStatement.Info("Creating clientSocket bean");
-        List<Socket> clientList = new ArrayList<>();
+        List<SocketClient> clientList = new ArrayList<>();
 
         class NewConnections extends Thread {
             @Override
@@ -38,9 +39,8 @@ public class ServerConnectionHandler {
                 while (true) {
                     if (clientList.size() < MAX_CLIENTS && !serverSocket.isClosed()) {
                         try {
-                            Socket newClient = null;
                             error = false;
-                            newClient = serverSocket.accept();
+                            SocketClient newClient = new SocketClient(serverSocket.accept());
                             synchronized(clientList) {
                                 clientList.add(newClient);
                                 sizeOfClientList = clientList.size();

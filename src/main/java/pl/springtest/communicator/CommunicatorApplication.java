@@ -16,4 +16,4 @@ public class CommunicatorApplication {
     }
 }
 
-//TODO - send messages from client to others clients
+//TODO - initial messages from clients

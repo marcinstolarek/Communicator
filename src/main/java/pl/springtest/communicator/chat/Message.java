@@ -32,6 +32,27 @@ public class Message {
     }
 
     /**
+     * Prepare text message to one line format (all expect MESSAGE ended by ";" - MESSAGE ends by "\n"):
+     * "VERSION_INFO:" + version (eg. "2.1.3;")
+     * "CLIENT_NAME:" + name (eq. "Adam;")
+     * "GROUP_ID:" + groupId (eq. "Group123;"
+     * "EXTRA:" + extra info to server (eg. "SHUTDOWN;" - client is shutting down)
+     * "MESSAGE:" + message from parameter
+     * EXTRA list:
+     * - SHUTDOWN - client is shutting down (since ver. 1.0.0)
+     * @return prepared string with data
+     */
+    public String getPreparedMessage() {
+        String preparedMessage = "VERSION_INFO:" + version + ";";
+        preparedMessage += "CLIENT_NAME:" + clientName + ";";
+        preparedMessage += "GROUP_ID:" + groupID + ";";
+        preparedMessage += "EXTRA:" + extraInfo + ";";
+        preparedMessage += "MESSAGE:" + message + "\n";
+
+        return preparedMessage;
+    }
+
+    /**
      * Parse prepared message to object Message
      * @param preparedMessage - message with data from client
      */
