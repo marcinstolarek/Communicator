@@ -13,6 +13,8 @@ import java.util.Objects;
  * "MESSAGE:" + message from parameter
  * EXTRA list:
  * - SHUTDOWN - client is shutting down (since ver. 1.0.0)
+ * - NEW_CONNECTION - client send information about new connection to server (since ver. 1.0.0)
+ * GROUP_ID can be "BROADCAST" - sending to everyone, but message should be from server, not client
  */
 public class Message {
     private String version;

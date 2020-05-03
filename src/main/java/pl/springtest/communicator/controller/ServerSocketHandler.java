@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import pl.springtest.communicator.chat.Message;
+import pl.springtest.communicator.info.AppInfo;
 import pl.springtest.communicator.statement.ServerStatement;
 
 import java.io.IOException;
@@ -45,7 +46,14 @@ public class ServerSocketHandler {
             @Override
             public void run() {
                 ServerStatement.Info("CTRL+C");
-                // TODO - send info to clients to shutdown them
+                // sending info to all clients about shutting down
+                Message shutdownMessage = new Message(AppInfo.VERSION_INFO, AppInfo.AUTHOR, "BROADCAST", "SHUTDOWN", "SERVER IS GOING DOWN");
+                synchronized (readWriteMessages) {
+                    readWriteMessages.add(shutdownMessage);
+                    readWriteMessages.notify(); // wake up sending thread
+                }
+                // TODO - inf loop below - check if notify helped, but it cannot be inf loop!
+                //while (!readWriteMessages.isEmpty()); // waiting for sending all messages
                 try {
                     finalNewServerSocket.close();
                 } catch (IOException e) {
