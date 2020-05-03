@@ -41,6 +41,7 @@ public class ServerSocketHandler {
             @Override
             public void run() {
                 ServerStatement.Info("CTRL+C");
+                // TODO - send info to clients to shutdown them
                 try {
                     finalNewServerSocket.close();
                 } catch (IOException e) {

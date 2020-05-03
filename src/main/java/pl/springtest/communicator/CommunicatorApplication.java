@@ -16,5 +16,4 @@ public class CommunicatorApplication {
     }
 }
 
-//TODO - create sockets list (multiple sockets immediately) - to do test
 //TODO - send messages from client to others clients

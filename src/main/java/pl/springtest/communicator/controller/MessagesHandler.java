@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,10 +33,12 @@ public class MessagesHandler {
             public void run() {
                 BufferedReader messageRaw = null;
                 Message message = null;
+                List<Integer> removeIndex = new ArrayList();
 
                 this.setName("Thread-NewMessages");
                 while (true) {
                     synchronized(clientSockets) {
+                        removeIndex.clear(); // clear list at the beginning
                         for (Socket client : clientSockets) {
                             try {
                                 messageRaw = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -43,15 +46,27 @@ public class MessagesHandler {
                                     String inputString = null;
                                     inputString = messageRaw.readLine();
                                     if (inputString != null) {
-                                        message = new Message("Client", inputString);
-                                        ServerStatement.Info("Message from client: " + message.printMessage());
+                                        message = new Message(inputString);
+                                        if (message.getExtraInfo().equals("SHUTDOWN")) // client is shutting down
+                                            removeIndex.add(clientSockets.indexOf(client));
+                                        else
+                                            ServerStatement.Info("Message from client: " + message.printMessageLocally());
                                     }
                                 }
                             } catch (IOException e) {
                                 ServerStatement.Error("Error while reading message from client.", ServerStatement.NO_EXIT);
-                                ServerStatement.Info("Client " + clientSockets.indexOf(client) + " is being removed");
-                                clientSockets.remove(client);
+                                //ServerStatement.Info("Client " + clientSockets.indexOf(client) + " is being removed");
+                                //clientSockets.remove(client);
                             }
+                        }
+                        for (int index = removeIndex.size() - 1; index >= 0; index--) {
+                            ServerStatement.Info("Closing connection (" + (removeIndex.get(index) + 1) + ").");
+                            try {
+                                clientSockets.get(removeIndex.get(index)).close(); // close connection
+                            } catch (IOException e) {
+                                ServerStatement.Error("Cannot close connection", ServerStatement.NO_EXIT);
+                            }
+                            clientSockets.remove(removeIndex.get(index)); // remove from list
                         }
                     }
                     try {

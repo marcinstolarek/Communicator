@@ -21,7 +21,7 @@ public class ServerConnectionHandler {
     private ServerSocket serverSocket;
 
     /**
-     * Create list with client connctions
+     * Create list with client connections
      */
     @Bean
     public List<Socket> clientSockets() {

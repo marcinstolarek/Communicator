@@ -7,3 +7,4 @@ pl/springtest/communicator/CommunicatorApplication.class
 pl/springtest/communicator/controller/ServerSocketHandler.class
 pl/springtest/communicator/controller/MessagesHandler$1NewMessages.class
 pl/springtest/communicator/chat/Message.class
+pl/springtest/communicator/info/AppInfo.class
