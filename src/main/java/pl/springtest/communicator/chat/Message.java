@@ -22,7 +22,6 @@ public class Message {
     private String groupID;
     private String extraInfo;
     private String message;
-    public static long index; // index of printed message
 
     public Message(String version, String clientName, String groupID, String extraInfo, String message){
         this.version = version;
@@ -42,6 +41,7 @@ public class Message {
      * "MESSAGE:" + message from parameter
      * EXTRA list:
      * - SHUTDOWN - client is shutting down (since ver. 1.0.0)
+     * - NEW_CONNECTION - client send information about new connection to server (since ver. 1.0.0)
      * @return prepared string with data
      */
     public String getPreparedMessage() {
@@ -201,7 +201,6 @@ public class Message {
      * @return format "user (groupID): message"
      */
     public String printMessageLocally(){
-        Message.index++;
         return clientName + " (" + groupID + "): " + message;
     }
 

@@ -4,6 +4,7 @@ import org.apache.catalina.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import pl.springtest.communicator.chat.ExtraInfo;
 import pl.springtest.communicator.chat.Message;
 import pl.springtest.communicator.socket.SocketClient;
 import pl.springtest.communicator.statement.ServerStatement;
@@ -61,8 +62,10 @@ public class MessagesHandler {
                                         if (message.getMessage() != null) {
                                             client.setUserName(message.getUserName()); // save userName info
                                             client.setGroupID(message.getGroupID()); // save groupID info
-                                            if (message.getExtraInfo().equals("SHUTDOWN")) // client is shutting down
+                                            if (message.getExtraInfo().equals(ExtraInfo.SHUTDOWN.toString())) // client is shutting down
                                                 removeIndex.add(clientSockets.indexOf(client));
+                                            else if (message.getExtraInfo().equals(ExtraInfo.SHUTDOWN.toString())) // new connection - handshake
+                                                ServerStatement.Info("New client: name: " + client.getUserName() + ", groupID: " + client.getGroupID() + ".");
                                             else {
                                                 ServerStatement.Info("Message from client: " + message.printMessageLocally());
                                                 synchronized (messageToSend) {
@@ -124,7 +127,8 @@ public class MessagesHandler {
                                 for (SocketClient client : clientSockets) {
                                     if (client.getGroupID() == null || client.getUserName() == null) // not recognized client - break
                                         continue;
-                                    if (client.getGroupID().equals(groupID) && !client.getUserName().equals(userName)) { // found addressee of message (same groupID, other userName)- send to this client
+                                    // found addressee of message (same groupID or broadcast, other userName)- send to this client
+                                    if ((client.getGroupID().equals(groupID) || groupID == "BROADCAST") && !client.getUserName().equals(userName)) {
                                         try {
                                             outMessage = new PrintWriter(client.getSocket().getOutputStream(), true);
                                             outMessage.write(message.getPreparedMessage());

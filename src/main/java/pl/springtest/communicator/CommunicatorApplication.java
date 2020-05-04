@@ -15,5 +15,3 @@ public class CommunicatorApplication {
         SpringApplication.run(CommunicatorApplication.class, args);
     }
 }
-
-//TODO - initial messages from clients

@@ -30,8 +30,6 @@ public class ServerSocketHandler {
         ServerSocket newServerSocket = null;
 
         ServerStatement.Info("Creating socketServer bean");
-        Message.index = 0; // initialize index of messages
-
         try {
             newServerSocket = new ServerSocket(port);
         } catch(IOException e) {
@@ -46,14 +44,23 @@ public class ServerSocketHandler {
             @Override
             public void run() {
                 ServerStatement.Info("CTRL+C");
-                // sending info to all clients about shutting down
-                Message shutdownMessage = new Message(AppInfo.VERSION_INFO, AppInfo.AUTHOR, "BROADCAST", "SHUTDOWN", "SERVER IS GOING DOWN");
+                // sending info to all clients about shutting down (broadcast)
+                Message shutdownMessage = new Message(AppInfo.VERSION_INFO, "Communicator Server", "BROADCAST", "SHUTDOWN", "SERVER IS GOING DOWN");
                 synchronized (readWriteMessages) {
                     readWriteMessages.add(shutdownMessage);
                     readWriteMessages.notify(); // wake up sending thread
                 }
-                // TODO - inf loop below - check if notify helped, but it cannot be inf loop!
-                //while (!readWriteMessages.isEmpty()); // waiting for sending all messages
+                // waiting for empty write buffer
+                for (int i = 0; i < 5; i++) {
+                    if (readWriteMessages.isEmpty())
+                        break;
+                    try {
+                        this.sleep(100);
+                    } catch (InterruptedException e) {
+                        ServerStatement.Error("InterruptedException error while sleeping in ShutdownHook.", ServerStatement.NO_EXIT);
+                    }
+                }
+
                 try {
                     finalNewServerSocket.close();
                 } catch (IOException e) {

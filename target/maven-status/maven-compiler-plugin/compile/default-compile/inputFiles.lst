@@ -4,5 +4,6 @@
 /home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/info/AppInfo.java
 /home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/CommunicatorApplication.java
 /home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/chat/Message.java
+/home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/chat/ExtraInfo.java
 /home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/controller/ServerSocketHandler.java
 /home/marcin/Java/Projekty/Communicator/src/main/java/pl/springtest/communicator/socket/SocketClient.java
